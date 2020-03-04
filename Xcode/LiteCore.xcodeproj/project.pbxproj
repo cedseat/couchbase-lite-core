@@ -48,6 +48,7 @@
 		1AD52280240F26F400832B71 /* inet_address.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF39D23036B2500B4D6C4 /* inet_address.cpp */; };
 		1AD52281240F270400832B71 /* exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF39F23036B2500B4D6C4 /* exception.cpp */; };
 		1AD52283240F274200832B71 /* netUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 279D40F51EA533D900D8DD9D /* netUtils.cc */; };
+		1AD5228E240F37DD00832B71 /* mbedtls_context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27ABDCC02305CB9F00274E6B /* mbedtls_context.cpp */; };
 		2700BB53216FF2DB00797537 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2700BB4D216FF2DA00797537 /* CoreML.framework */; };
 		2700BB5B217005A900797537 /* CoreMLPredictiveModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2700BB5A217005A900797537 /* CoreMLPredictiveModel.mm */; };
 		2700BB75217905FE00797537 /* libLiteCore-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27EF81121917EEC600A327B9 /* libLiteCore-static.a */; };
@@ -3835,6 +3836,7 @@
 				276D15411DFF541000543B1B /* SQLiteQuery.cc in Sources */,
 				1AD5226F240F24CE00832B71 /* RESTListener.cc in Sources */,
 				27CCD4AE2315DB03003DEB99 /* CookieStore.cc in Sources */,
+				1AD5228E240F37DD00832B71 /* mbedtls_context.cpp in Sources */,
 				93CD01111E933BE100AFB3FA /* c4Socket.cc in Sources */,
 				1AD52273240F24DA00832B71 /* Response.cc in Sources */,
 				1AD52274240F24DA00832B71 /* Request.cc in Sources */,
