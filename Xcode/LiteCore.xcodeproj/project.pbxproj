@@ -26,6 +26,28 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1AD52269240F24A600832B71 /* c4Listener.cc in Sources */ = {isa = PBXBuildFile; fileRef = 275A74D51ED3AA11008CB57B /* c4Listener.cc */; };
+		1AD5226E240F24B300832B71 /* RESTSyncListener_stub.cc in Sources */ = {isa = PBXBuildFile; fileRef = 270BEE1D20647E8A005E8BE8 /* RESTSyncListener_stub.cc */; };
+		1AD5226F240F24CE00832B71 /* RESTListener.cc in Sources */ = {isa = PBXBuildFile; fileRef = 272851201EA4537A009CA22F /* RESTListener.cc */; };
+		1AD52270240F24CE00832B71 /* RESTListener+Handlers.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2749B9861EB298360068DBF9 /* RESTListener+Handlers.cc */; };
+		1AD52271240F24CE00832B71 /* RESTListener+Replicate.cc in Sources */ = {isa = PBXBuildFile; fileRef = 270C6B681EB7DDAD00E73415 /* RESTListener+Replicate.cc */; };
+		1AD52272240F24DA00832B71 /* Server.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2728512C1EA46475009CA22F /* Server.cc */; };
+		1AD52273240F24DA00832B71 /* Response.cc in Sources */ = {isa = PBXBuildFile; fileRef = 276E02191EA983EE00FEFE8A /* Response.cc */; };
+		1AD52274240F24DA00832B71 /* Request.cc in Sources */ = {isa = PBXBuildFile; fileRef = 272851271EA46421009CA22F /* Request.cc */; };
+		1AD52275240F251100832B71 /* TCPSocket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 270F2BD42301E8AE00D8DB21 /* TCPSocket.cc */; };
+		1AD52276240F251100832B71 /* Poller.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27D95BA8239F217A0090CE46 /* Poller.cc */; };
+		1AD52277240F251100832B71 /* TLSContext.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27469CFC233C35EB00A1EE1A /* TLSContext.cc */; };
+		1AD52278240F252200832B71 /* HTTPTypes.cc in Sources */ = {isa = PBXBuildFile; fileRef = 271C069723078176000EC09B /* HTTPTypes.cc */; };
+		1AD52279240F252200832B71 /* HTTPLogic.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27727C53230F279D0082BCC9 /* HTTPLogic.cc */; };
+		1AD5227A240F257100832B71 /* BuiltInWebSocket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27304A0423023FCF0049AC69 /* BuiltInWebSocket.cc */; };
+		1AD5227B240F261800832B71 /* Listener.cc in Sources */ = {isa = PBXBuildFile; fileRef = 275A74CF1ED3A4E1008CB57B /* Listener.cc */; };
+		1AD5227C240F26AD00832B71 /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF3A023036B2500B4D6C4 /* socket.cpp */; };
+		1AD5227D240F26BE00832B71 /* stream_socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF3A523036B2500B4D6C4 /* stream_socket.cpp */; };
+		1AD5227E240F26CB00832B71 /* acceptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF3A123036B2500B4D6C4 /* acceptor.cpp */; };
+		1AD5227F240F26D800832B71 /* connector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF3A423036B2500B4D6C4 /* connector.cpp */; };
+		1AD52280240F26F400832B71 /* inet_address.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF39D23036B2500B4D6C4 /* inet_address.cpp */; };
+		1AD52281240F270400832B71 /* exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AFF39F23036B2500B4D6C4 /* exception.cpp */; };
+		1AD52283240F274200832B71 /* netUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 279D40F51EA533D900D8DD9D /* netUtils.cc */; };
 		2700BB53216FF2DB00797537 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2700BB4D216FF2DA00797537 /* CoreML.framework */; };
 		2700BB5B217005A900797537 /* CoreMLPredictiveModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2700BB5A217005A900797537 /* CoreMLPredictiveModel.mm */; };
 		2700BB75217905FE00797537 /* libLiteCore-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27EF81121917EEC600A327B9 /* libLiteCore-static.a */; };
@@ -3763,11 +3785,15 @@
 				2771B01A1FB2817800C6B794 /* SQLiteKeyStore+Indexes.cc in Sources */,
 				27393A871C8A353A00829C9B /* Error.cc in Sources */,
 				27B699DB1F27B50000782145 /* SQLiteN1QLFunctions.cc in Sources */,
+				1AD5227A240F257100832B71 /* BuiltInWebSocket.cc in Sources */,
 				27098ABC217525B7002751DA /* SQLiteKeyStore+FTSIndexes.cc in Sources */,
 				726F2B901EB2C36E00C1EC3C /* DefaultLogger.cc in Sources */,
+				1AD52280240F26F400832B71 /* inet_address.cpp in Sources */,
 				27469D09233D719800A1EE1A /* mbedUtils.cc in Sources */,
+				1AD5227B240F261800832B71 /* Listener.cc in Sources */,
 				27098A97216C1D2E002751DA /* c4PredictiveQuery.cc in Sources */,
 				2754B0C71E5F5C2900A05FD0 /* StringUtil.cc in Sources */,
+				1AD52275240F251100832B71 /* TCPSocket.cc in Sources */,
 				27098AA6216C2108002751DA /* PredictiveModel.cc in Sources */,
 				27469D07233D719800A1EE1A /* PublicKey.cc in Sources */,
 				27098AC421752A29002751DA /* SQLiteKeyStore+PredictiveIndexes.cc in Sources */,
@@ -3780,13 +3806,17 @@
 				273E9F721C51612E003115A6 /* c4Database.cc in Sources */,
 				272850AB1E9AF53B009CA22F /* Upgrader.cc in Sources */,
 				27469D08233D719800A1EE1A /* PublicKey+Apple.mm in Sources */,
+				1AD52271240F24CE00832B71 /* RESTListener+Replicate.cc in Sources */,
+				1AD52270240F24CE00832B71 /* RESTListener+Handlers.cc in Sources */,
 				27FC8E77221399AC0083B033 /* LeafDocument.cc in Sources */,
 				2769438C1DCD502A00DB2555 /* c4Observer.cc in Sources */,
 				2705154D1D8CBE6C00D62D05 /* c4Query.cc in Sources */,
+				1AD5227D240F26BE00832B71 /* stream_socket.cpp in Sources */,
 				27C319EE1A143F5D00A89EDC /* KeyStore.cc in Sources */,
 				275E4CCC22417D13006C5B71 /* Inserter.cc in Sources */,
 				2722504E1D7892610006D5A5 /* c4BlobStore.cc in Sources */,
 				275E9905238360B200EA516B /* Checkpointer.cc in Sources */,
+				1AD5227C240F26AD00832B71 /* socket.cpp in Sources */,
 				275B35A5234E753800FE9CF0 /* Housekeeper.cc in Sources */,
 				271AB0162374AD09007B0319 /* IndexSpec.cc in Sources */,
 				93CD01101E933BE100AFB3FA /* Checkpoint.cc in Sources */,
@@ -3796,11 +3826,18 @@
 				27D74A9F1D4FF65000D806E0 /* c4Base.cc in Sources */,
 				27FDF1391DA8116A0087B4E6 /* SQLiteFleeceEach.cc in Sources */,
 				27F2BEA0221DF1A0006C13EE /* DBAccess.cc in Sources */,
+				1AD52269240F24A600832B71 /* c4Listener.cc in Sources */,
+				1AD5227E240F26CB00832B71 /* acceptor.cpp in Sources */,
 				273407231DEE116600EA5532 /* PlatformIO.cc in Sources */,
+				1AD52276240F251100832B71 /* Poller.cc in Sources */,
+				1AD5226E240F24B300832B71 /* RESTSyncListener_stub.cc in Sources */,
 				27B341271D9C7A90009FFA0B /* SQLiteFleeceFunctions.cc in Sources */,
 				276D15411DFF541000543B1B /* SQLiteQuery.cc in Sources */,
+				1AD5226F240F24CE00832B71 /* RESTListener.cc in Sources */,
 				27CCD4AE2315DB03003DEB99 /* CookieStore.cc in Sources */,
 				93CD01111E933BE100AFB3FA /* c4Socket.cc in Sources */,
+				1AD52273240F24DA00832B71 /* Response.cc in Sources */,
+				1AD52274240F24DA00832B71 /* Request.cc in Sources */,
 				27DF46C41A12CF46007BB4A4 /* Record.cc in Sources */,
 				27E4872B1923F24D007D8940 /* VersionedDocument.cc in Sources */,
 				276CE6832267991500B681AC /* n1ql.cc in Sources */,
@@ -3814,11 +3851,13 @@
 				27D74A801D4D3F2300D806E0 /* Exception.cpp in Sources */,
 				273E9F731C51612E003115A6 /* c4Document.cc in Sources */,
 				2763012B1F3A36BD004A1592 /* StringUtil_Apple.mm in Sources */,
+				1AD52279240F252200832B71 /* HTTPLogic.cc in Sources */,
 				27098AA1216C1E88002751DA /* SQLitePredictionFunction.cc in Sources */,
 				27D9655A23355DC900F4A51C /* SecureDigest.cc in Sources */,
 				27ADA7891F2AB6C800D9DE25 /* UnicodeCollator_Apple.cc in Sources */,
 				274EDDEC1DA2F488003AD158 /* SQLiteKeyStore.cc in Sources */,
 				27FC8DBD22135BDA0083B033 /* RevFinder.cc in Sources */,
+				1AD52283240F274200832B71 /* netUtils.cc in Sources */,
 				27D74A7C1D4D3F2300D806E0 /* Column.cpp in Sources */,
 				2763011B1F32A7FD004A1592 /* UnicodeCollator_Stub.cc in Sources */,
 				93CD010D1E933BE100AFB3FA /* Replicator.cc in Sources */,
@@ -3827,7 +3866,10 @@
 				729272F52238DC0C00E7208E /* c4ExceptionUtils.cc in Sources */,
 				278963671D7B7E7D00493096 /* Stream.cc in Sources */,
 				27B699E11F27B85900782145 /* SQLiteFleeceUtil.cc in Sources */,
+				1AD52277240F251100832B71 /* TLSContext.cc in Sources */,
 				27E3DD581DB8524300F2872D /* Database.cc in Sources */,
+				1AD5227F240F26D800832B71 /* connector.cpp in Sources */,
+				1AD52281240F270400832B71 /* exception.cpp in Sources */,
 				27FB0C3D205B18A500987D9C /* Instrumentation.cc in Sources */,
 				27D74A821D4D3F2300D806E0 /* Statement.cpp in Sources */,
 				27E487231922A64F007D8940 /* RevTree.cc in Sources */,
@@ -3835,6 +3877,7 @@
 				279C18F01DF2051600D3221D /* SQLiteFTSRankFunction.cc in Sources */,
 				27E6DFF01DA5AFF3008EB681 /* Query.cc in Sources */,
 				27D74A7E1D4D3F2300D806E0 /* Database.cpp in Sources */,
+				1AD52278240F252200832B71 /* HTTPTypes.cc in Sources */,
 				27ADA79B1F2BF64100D9DE25 /* UnicodeCollator.cc in Sources */,
 				27BF024B1FB62726003D5BB8 /* LibC++Debug.cc in Sources */,
 				93CD010E1E933BE100AFB3FA /* Puller.cc in Sources */,
@@ -3853,6 +3896,7 @@
 				27469D05233D58D900A1EE1A /* c4Certificate.cc in Sources */,
 				27D74A7A1D4D3F2300D806E0 /* Backup.cpp in Sources */,
 				276683B61DC7DD2E00E3F187 /* SequenceTracker.cc in Sources */,
+				1AD52272240F24DA00832B71 /* Server.cc in Sources */,
 				27F0426C2196264900D7C6FA /* SQLiteDataFile+Indexes.cc in Sources */,
 				278963621D7A376900493096 /* EncryptedStream.cc in Sources */,
 				72A3AF891F424EC0001E16D4 /* PrebuiltCopier.cc in Sources */,
