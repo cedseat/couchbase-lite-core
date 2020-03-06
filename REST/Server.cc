@@ -34,6 +34,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
 #include "sockpp/tcp_acceptor.h"
+#include "sockpp/inet6_address.h"
 #pragma clang diagnostic pop
 
 
@@ -60,7 +61,15 @@ namespace litecore { namespace REST {
 
         _port = port;
         _tlsContext = tlsContext;
-        _acceptor.reset(new tcp_acceptor (port));
+        
+        if (hostname) {
+            inet_address addr;
+            addr.create(string(hostname), port);
+            _acceptor.reset(new tcp_acceptor (addr));
+        } else {
+            _acceptor.reset(new tcp_acceptor (port));
+        }
+        
         if (!*_acceptor)
             error::_throw(error::POSIX, _acceptor->last_error());
         _acceptor->set_non_blocking();

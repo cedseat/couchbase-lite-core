@@ -55,6 +55,7 @@ extern "C" {
     /** Configuration for a C4Listener. */
     typedef struct C4ListenerConfig {
         uint16_t port;                  ///< TCP port to listen on
+        const char* hostname;           ///< Hostname
         C4ListenerAPIs apis;            ///< Which API(s) to enable
         C4TLSConfig* tlsConfig;         ///< TLS configuration, or NULL for no TLS
 

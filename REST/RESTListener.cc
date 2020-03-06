@@ -90,10 +90,8 @@ namespace litecore { namespace REST {
             addDBHandler(Method::UPGRADE, "/[^_][^/]*/_blipsync", &RESTListener::handleSync);
         }
 
-        const char *hostname = nullptr;
-
         _server->start(config.port ? config.port : kDefaultPort,
-                       hostname,
+                       config.hostname ? config.hostname : nullptr,
                        createTLSContext(config.tlsConfig));
     }
 
