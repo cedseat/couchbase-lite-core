@@ -86,8 +86,10 @@ namespace litecore { namespace REST {
             addDBHandler(Method::PUT,   "/[^_][^/]*/[^_].*",      &RESTListener::handleModifyDoc);
             addDBHandler(Method::DELETE,"/[^_][^/]*/[^_].*",      &RESTListener::handleModifyDoc);
         }
+        
         if (config.apis & kC4SyncAPI) {
-            addDBHandler(Method::UPGRADE, "/[^_][^/]*/_blipsync", &RESTListener::handleSync);
+            // TODO: verify this change before commit to master
+            addDBHandler(Method::UPGRADE, "/([^_][^/])*/_blipsync", &RESTListener::handleSync);
         }
 
         _server->start(config.port ? config.port : kDefaultPort,
