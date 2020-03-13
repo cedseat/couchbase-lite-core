@@ -26,8 +26,14 @@ extern "C" {
     /** \defgroup Listener  Network Listener: REST API and Sync Server
         @{ */
 
+    // TODO: rename
+    typedef bool (*C4ListenerBasicAuthFunction)(C4AuthType type,
+                                                C4Slice username,
+                                                C4Slice password,
+                                                void* context);
+    
 
-    /** Flags indicating which network API(s) to serve. */
+/** Flags indicating which network API(s) to serve. */
     typedef C4_OPTIONS(unsigned, C4ListenerAPIs) {
         kC4RESTAPI = 0x01,              ///< CouchDB-like REST API
         kC4SyncAPI = 0x02               ///< Replication server
@@ -67,6 +73,7 @@ extern "C" {
         // For sync listeners only:
         bool allowPush;
         bool allowPull;
+        C4ListenerBasicAuthFunction basicAuthFunc; // TODO: rename
     } C4ListenerConfig;
 
 
