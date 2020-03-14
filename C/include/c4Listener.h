@@ -27,8 +27,7 @@ extern "C" {
         @{ */
 
     // TODO: rename
-    typedef bool (*C4ListenerBasicAuthFunction)(C4AuthType type,
-                                                C4Slice username,
+    typedef bool (*C4ListenerBasicAuthFunction)(C4Slice username,
                                                 C4Slice password,
                                                 void* context);
     
