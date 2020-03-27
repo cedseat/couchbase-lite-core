@@ -26,11 +26,17 @@ extern "C" {
     /** \defgroup Listener  Network Listener: REST API and Sync Server
         @{ */
 
-    // TODO: rename
-    typedef bool (*C4ListenerBasicAuthFunction)(C4Slice username,
-                                                C4Slice password,
-                                                void* context);
-    
+    typedef C4_ENUM(unsigned, C4ListenerAuthType) {
+        C4ListenerAuthTypeBasic,
+        C4ListenerAuthTypeCert,
+    };
+
+    typedef bool (*C4ListenerAuthCallback)(C4ListenerAuthType type,
+                                           C4Slice username,
+                                           C4Slice password,
+                                           C4Slice certDict,
+                                           void* context);
+
 
 /** Flags indicating which network API(s) to serve. */
     typedef C4_OPTIONS(unsigned, C4ListenerAPIs) {
@@ -60,7 +66,6 @@ extern "C" {
     /** Configuration for a C4Listener. */
     typedef struct C4ListenerConfig {
         uint16_t port;                  ///< TCP port to listen on
-        const char* hostname;           ///< Hostname
         C4ListenerAPIs apis;            ///< Which API(s) to enable
         C4TLSConfig* tlsConfig;         ///< TLS configuration, or NULL for no TLS
 
@@ -72,7 +77,9 @@ extern "C" {
         // For sync listeners only:
         bool allowPush;
         bool allowPull;
-        C4ListenerBasicAuthFunction basicAuthFunc; // TODO: rename
+        
+        C4String networkInterface;
+        C4ListenerAuthCallback authCallback;
     } C4ListenerConfig;
 
 

@@ -91,7 +91,7 @@ namespace litecore { namespace REST {
         }
 
         _server->start(config.port ? config.port : kDefaultPort,
-                       config.hostname ? config.hostname : nullptr,
+                       config.networkInterface.buf ? (const char *)config.networkInterface.buf : nullptr,
                        createTLSContext(config.tlsConfig));
     }
 
