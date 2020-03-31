@@ -22,6 +22,7 @@
 #include "PlatformCompat.hh"
 #include "StringUtil.hh"
 #include "Writer.hh"
+#include "c4Listener.h"
 
 namespace litecore { namespace net {
     class ResponderSocket;
@@ -108,6 +109,8 @@ namespace litecore { namespace REST {
         // WebSocket stuff:
 
         bool isValidWebSocketRequest();
+        
+        bool isValidUsernamePassword(C4ListenerPasswordAuthCallback validator, void* ctx);
 
         void sendWebSocketResponse(const std::string &protocol);
 

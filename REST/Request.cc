@@ -27,6 +27,7 @@
 #include "netUtils.hh"
 #include "TCPSocket.hh"
 #include <stdarg.h>
+#include "c4Listener.h"
 
 using namespace std;
 using namespace fleece;
@@ -371,6 +372,19 @@ namespace litecore { namespace REST {
             && header("Upgrade").caseEquivalent("websocket"_sl)
             && header("Sec-WebSocket-Version").readDecimal() >= 13
             && header("Sec-WebSocket-Key").size >= 10;
+    }
+
+    bool RequestResponse::isValidUsernamePassword(C4ListenerPasswordAuthCallback validator, void* ctx) {
+        slice authData = header("Authorization");
+        slice type = authData.readToDelimiter(" "_sl);
+        if (type == slice(kC4AuthTypeBasic)) {
+            alloc_slice decoded = slice(authData).decodeBase64();
+            slice cred = slice(decoded);
+            slice username = cred.readToDelimiter(":"_sl);
+            return validator(username, cred, ctx);
+        }
+        
+        return true;
     }
 
 
