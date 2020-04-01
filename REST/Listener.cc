@@ -29,7 +29,9 @@ using namespace fleece;
 namespace litecore { namespace REST {
 
 
-    Listener::Listener() {
+    Listener::Listener(const Config &config)
+    :_config(config)
+    {
         if (!RESTLog)
             RESTLog = c4log_getDomain("REST", true);
     }

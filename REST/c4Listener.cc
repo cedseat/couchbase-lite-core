@@ -88,3 +88,8 @@ bool c4listener_unshareDB(C4Listener *listener, C4String name) noexcept {
     } catchExceptions()
     return false;
 }
+
+
+int c4listener_connectionCount(C4Listener *listener C4NONNULL) C4API {
+    return internal(listener)->connectionCount();
+}

@@ -22,8 +22,13 @@ public:
 
 
     ~ListenerHarness() {
-        listener = nullptr; // stop listener
+        _listener = nullptr; // stop listener
         gC4ExpectExceptions = false;
+    }
+
+
+    C4Listener* listener() const {
+        return _listener;
     }
 
 
@@ -35,17 +40,17 @@ public:
               (c4keypair_isPersistent(id.key) ? "persistent" : "temporary"), SPLAT(digest));
         serverIdentity = id;
 
-        configCertData = alloc_slice(c4cert_copyChainData(id.cert));
-        tlsConfig.certificate = configCertData;
+        _configCertData = alloc_slice(c4cert_copyChainData(id.cert));
+        _tlsConfig.certificate = _configCertData;
 
-        configKeyData = alloc_slice(c4keypair_privateKeyData(id.key));
-        if (configKeyData) {
-            tlsConfig.privateKey = configKeyData;
-            tlsConfig.privateKeyRepresentation = kC4PrivateKeyData;
+        _configKeyData = alloc_slice(c4keypair_privateKeyData(id.key));
+        if (_configKeyData) {
+            _tlsConfig.privateKey = _configKeyData;
+            _tlsConfig.privateKeyRepresentation = kC4PrivateKeyData;
         } else {
-            tlsConfig.privateKeyRepresentation = kC4PrivateKeyFromCert;
+            _tlsConfig.privateKeyRepresentation = kC4PrivateKeyFromCert;
         }
-        config.tlsConfig = &tlsConfig;
+        config.tlsConfig = &_tlsConfig;
         return id.cert;
     }
 
@@ -61,9 +66,9 @@ public:
 
 
     void setListenerRootClientCerts(C4Cert *certs) {
-        configClientRootCertData = alloc_slice(c4cert_copyChainData(certs));
-        tlsConfig.requireClientCerts = true;
-        tlsConfig.rootClientCerts = configClientRootCertData;
+        _configClientRootCertData = alloc_slice(c4cert_copyChainData(certs));
+        _tlsConfig.requireClientCerts = true;
+        _tlsConfig.rootClientCerts = _configClientRootCertData;
     }
 
 
@@ -89,31 +94,40 @@ public:
     C4Cert* useClientTLSWithPersistentKey() {
         return useClientIdentity(CertHelper::instance().persistentClientIdentity());
     }
+
+
 #endif
+
+
+    void setCertAuthCallback(C4ListenerCertAuthCallback callback, void *context) {
+        _tlsConfig.certAuthCallback = callback;
+        _tlsConfig.tlsCallbackContext = context;
+    }
+    
 #endif // COUCHBASE_ENTERPRISE
 
     void share(C4Database *dbToShare, slice name) {
-        if (listener)
+        if (_listener)
             return;
         auto missing = config.apis & ~c4listener_availableAPIs();
         if (missing)
             FAIL("Listener API " << missing << " is unavailable in this build");
         C4Error err;
-        listener = c4listener_start(&config, &err);
-        REQUIRE(listener);
+        _listener = c4listener_start(&config, &err);
+        REQUIRE(_listener);
 
-        REQUIRE(c4listener_shareDB(listener, name, dbToShare));
+        REQUIRE(c4listener_shareDB(_listener, name, dbToShare));
     }
 
+public:
     C4ListenerConfig config;
 #ifdef COUCHBASE_ENTERPRISE
     Identity serverIdentity, clientIdentity;
 #endif
 
 private:
-    c4::ref<C4Listener> listener;
-
-    C4TLSConfig tlsConfig = { };
-    alloc_slice configCertData, configKeyData, configClientRootCertData;
+    c4::ref<C4Listener> _listener;
+    C4TLSConfig _tlsConfig = { };
+    alloc_slice _configCertData, _configKeyData, _configClientRootCertData;
 };
 

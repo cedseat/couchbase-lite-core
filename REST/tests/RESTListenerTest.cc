@@ -22,6 +22,7 @@
 #include "FilePath.hh"
 #include "Response.hh"
 #include "c4Internal.hh"
+#include <optional>
 
 using namespace litecore::net;
 using namespace litecore::REST;
@@ -55,6 +56,27 @@ public:
         directory = alloc_slice(tempDir.path().c_str());
         config.directory = directory;
         config.allowCreateDBs = true;
+    }
+
+
+    void setupCertAuth() {
+        auto callback = [](C4Listener *listener, C4Slice clientCertData, void *context)->bool {
+            auto self = (C4RESTTest*)context;
+            self->receivedCertAuth = clientCertData;
+            return self->allowClientCert;
+        };
+        setCertAuthCallback(callback, this);
+    }
+
+
+    void setupHTTPAuth() {
+        config.callbackContext = this;
+        config.httpAuthCallback = [](C4Listener *listener, C4Slice authHeader, void *context) {
+            auto self = (C4RESTTest*)context;
+            self->receivedHTTPAuthFromListener = listener;
+            self->receivedHTTPAuthHeader = authHeader;
+            return self->allowHTTPConnection;
+        };
     }
 
 
@@ -104,9 +126,18 @@ public:
     }
 
     alloc_slice directory;
+
+    C4Listener* receivedHTTPAuthFromListener = nullptr;
+    optional<alloc_slice> receivedHTTPAuthHeader;
+    bool allowHTTPConnection = true;
+
     alloc_slice pinnedCert;
 #ifdef COUCHBASE_ENTERPRISE
     c4::ref<C4Cert> rootCerts;
+
+    C4Listener* receivedCertAuthFromListener = nullptr;
+    optional<alloc_slice> receivedCertAuth;
+    bool allowClientCert = true;
 #endif
 };
 
@@ -334,6 +365,44 @@ TEST_CASE_METHOD(C4RESTTest, "REST _bulk_docs", "[REST][Listener][C]") {
 }
 
 
+#pragma mark - HTTP AUTH:
+
+
+TEST_CASE_METHOD(C4RESTTest, "REST HTTP auth missing", "[REST][Listener][C]") {
+    setupHTTPAuth();
+    allowHTTPConnection = false;
+    auto r = request("GET", "/", HTTPStatus::Unauthorized);
+    CHECK(r->header("WWW-Authenticate") == "Basic charset=\"UTF-8\"");
+    CHECK(receivedHTTPAuthFromListener == listener());
+    CHECK(receivedHTTPAuthHeader == nullslice);
+}
+
+
+TEST_CASE_METHOD(C4RESTTest, "REST HTTP auth incorrect", "[REST][Listener][C]") {
+    setupHTTPAuth();
+    allowHTTPConnection = false;
+    auto r = request("GET", "/",
+                     {{"Authorization", "Basic xxxx"}},
+                     nullslice,
+                     HTTPStatus::Unauthorized);
+    CHECK(r->header("WWW-Authenticate") == "Basic charset=\"UTF-8\"");
+    CHECK(receivedHTTPAuthFromListener == listener());
+    CHECK(receivedHTTPAuthHeader == "Basic xxxx");
+}
+
+
+TEST_CASE_METHOD(C4RESTTest, "REST HTTP auth correct", "[REST][Listener][C]") {
+    setupHTTPAuth();
+    allowHTTPConnection = true;
+    auto r = request("GET", "/",
+                     {{"Authorization", "Basic xxxx"}},
+                     nullslice,
+                     HTTPStatus::OK);
+    CHECK(receivedHTTPAuthFromListener == listener());
+    CHECK(receivedHTTPAuthHeader == "Basic xxxx");
+}
+
+
 #pragma mark - TLS:
 
 
@@ -366,6 +435,18 @@ TEST_CASE_METHOD(C4RESTTest, "TLS REST client cert", "[REST][Listener][TLS][C]")
     pinnedCert = useServerTLSWithTemporaryKey();
     useClientTLSWithTemporaryKey();
     testRootLevel();
+}
+
+
+TEST_CASE_METHOD(C4RESTTest, "TLS REST client cert w/auth callback", "[REST][Listener][TLS][C]") {
+    pinnedCert = useServerTLSWithTemporaryKey();
+    useClientTLSWithTemporaryKey();
+
+    setupCertAuth();
+    allowClientCert = false;
+
+    auto r = request("GET", "/", HTTPStatus::undefined);
+    CHECK(r->error() == (C4Error{NetworkDomain, kC4NetErrTLSCertRejectedByPeer}));
 }
 
 

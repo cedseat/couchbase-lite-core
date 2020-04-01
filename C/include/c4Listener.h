@@ -41,6 +41,25 @@ extern "C" {
     };
 
 
+    /** Called when a client connects, during the TLS handshake, if a client certificate is received.
+        @param listener  The C4Listener handling the connection.
+        @param clientCertData  The client's X.509 certificate in DER encoding.
+        @param context  The `tlsCallbackContext` from the `C4TLSConfig`.
+        @return  True to allow the connection, false to refuse it. */
+    typedef bool (*C4ListenerCertAuthCallback)(C4Listener *listener,
+                                               C4Slice clientCertData,
+                                               void *context);
+
+    /** Called when a client connects, after the TLS handshake (if any), when the initial HTTP request is
+        received.
+        @param listener  The C4Listener handling the connection.
+        @param authHeader  The "Authorization" header value from the client's HTTP request, or null.
+        @param context  The `callbackContext` from the listener config.
+        @return  True to allow the connection, false to refuse it. */
+    typedef bool (*C4ListenerHTTPAuthCallback)(C4Listener *listener,
+                                               C4Slice authHeader,
+                                               void *context);
+
     /** TLS configuration for C4Listener. */
     typedef struct C4TLSConfig {
         C4PrivateKeyRepresentation privateKeyRepresentation; ///< Interpretation of `privateKey`
@@ -49,6 +68,8 @@ extern "C" {
         C4Slice certificate;            ///< X.509 certificate data
         bool requireClientCerts;        ///< True to require clients to authenticate with a cert
         C4Slice rootClientCerts;        ///< Root CA certs to trust when verifying client cert
+        C4ListenerCertAuthCallback certAuthCallback; ///< Callback cor X.509 cert auth
+        void* tlsCallbackContext;
     } C4TLSConfig;
 
 
@@ -57,6 +78,9 @@ extern "C" {
         uint16_t port;                  ///< TCP port to listen on
         C4ListenerAPIs apis;            ///< Which API(s) to enable
         C4TLSConfig* tlsConfig;         ///< TLS configuration, or NULL for no TLS
+
+        C4ListenerHTTPAuthCallback httpAuthCallback; ///< Callback for HTTP auth
+        void* callbackContext;
 
         // For REST listeners only:
         C4String directory;             ///< Directory where newly-PUT databases will be created
@@ -87,6 +111,8 @@ extern "C" {
     bool c4listener_unshareDB(C4Listener *listener C4NONNULL,
                               C4String name) C4API;
 
+    /** Returns the number of client connections. */
+    int c4listener_connectionCount(C4Listener *listener C4NONNULL) C4API;
 
     /** A convenience that, given a filesystem path to a database, returns the database name
         for use in an HTTP URI path. */

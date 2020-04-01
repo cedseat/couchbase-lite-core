@@ -54,13 +54,21 @@ namespace litecore { namespace REST {
 
 
     RESTListener::RESTListener(const Config &config)
-    :_directory(config.directory.buf ? new FilePath(slice(config.directory).asString(), "")
+    :Listener(config)
+    ,_directory(config.directory.buf ? new FilePath(slice(config.directory).asString(), "")
                                      : nullptr)
     ,_allowCreateDB(config.allowCreateDBs && _directory)
     ,_allowDeleteDB(config.allowDeleteDBs)
     {
         _server = new Server();
         _server->setExtraHeaders({{"Server", serverNameAndVersion()}});
+
+        if (auto callback = config.httpAuthCallback; callback) {
+            void *context = config.callbackContext;
+            _server->setAuthenticator([=](slice authorizationHeader) {
+                return callback((C4Listener*)this, authorizationHeader, context);
+            });
+        }
 
         if (config.apis & kC4RESTAPI) {
             // Root:
@@ -145,7 +153,18 @@ namespace litecore { namespace REST {
             tlsContext->requirePeerCert(true);
         if (tlsConfig->rootClientCerts.buf)
             tlsContext->setRootCerts(tlsConfig->rootClientCerts);
+        if (auto callback = tlsConfig->certAuthCallback; callback) {
+            auto context = tlsConfig->tlsCallbackContext;
+            tlsContext->setCertAuthCallback([=](slice certData) {
+                return callback((C4Listener*)this, certData, context);
+            });
+        }
         return tlsContext;
+    }
+
+
+    int RESTListener::connectionCount() {
+        return _server->connectionCount();
     }
 
 

@@ -54,6 +54,11 @@ namespace litecore { namespace REST {
 
         C4Address address() const;
 
+        /** A function that authenticates an HTTP request, given the "Authorization" header. */
+        using Authenticator = std::function<bool(slice)>;
+
+        void setAuthenticator(Authenticator auth)       {_authenticator = move(auth);}
+
         /** Extra HTTP headers to add to every response. */
         void setExtraHeaders(const std::map<std::string, std::string> &headers);
 
@@ -65,6 +70,8 @@ namespace litecore { namespace REST {
             Multiple patterns can be joined with a "|".
             Patterns are tested in the order the handlers are added, and the first match is used.*/
         void addHandler(net::Methods, const std::string &pattern, const Handler&);
+
+        int connectionCount()                           {return _connectionCount;}
 
     protected:
         struct URIRule {
@@ -91,6 +98,8 @@ namespace litecore { namespace REST {
         std::vector<URIRule> _rules;
         std::map<std::string, std::string> _extraHeaders;
         uint16_t _port;
+        std::atomic<int> _connectionCount {0};
+        Authenticator _authenticator;
     };
 
 } }
