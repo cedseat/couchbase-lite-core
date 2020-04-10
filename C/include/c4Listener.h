@@ -26,6 +26,12 @@ extern "C" {
     /** \defgroup Listener  Network Listener: REST API and Sync Server
         @{ */
 
+typedef bool (*C4ListenerPasswordAuthCallback)(C4Slice header,
+                                               void* context);
+
+
+/** Flags indicating which network API(s) to serve. */
+typedef bool (*C4ListenerCertAuthCallback)(C4Slice clientCert, void* context);
 
     /** Flags indicating which network API(s) to serve. */
     typedef C4_OPTIONS(unsigned, C4ListenerAPIs) {
@@ -49,6 +55,7 @@ extern "C" {
         C4Slice certificate;            ///< X.509 certificate data
         bool requireClientCerts;        ///< True to require clients to authenticate with a cert
         C4Slice rootClientCerts;        ///< Root CA certs to trust when verifying client cert
+        C4ListenerCertAuthCallback certAuthCallback;
     } C4TLSConfig;
 
 
@@ -66,6 +73,10 @@ extern "C" {
         // For sync listeners only:
         bool allowPush;
         bool allowPull;
+        
+        C4String hostname;
+        C4ListenerPasswordAuthCallback passwordAuthCallback;
+        void* context;
     } C4ListenerConfig;
 
 
