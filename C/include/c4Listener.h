@@ -26,13 +26,9 @@ extern "C" {
     /** \defgroup Listener  Network Listener: REST API and Sync Server
         @{ */
 
-    typedef bool (*C4ListenerPasswordAuthCallback)(C4Slice username,
-                                                   C4Slice password,
-                                                   void* context);
+    typedef bool (*C4ListenerPasswordAuthCallback)(C4Slice header, void* context);
 
-    typedef bool (*C4ListenerCertAuthCallback)(C4Slice clientCert,
-                                               C4Slice rootCerts,
-                                               void* context);
+    typedef bool (*C4ListenerCertAuthCallback)(C4Slice clientCert, void* context);
 
 
 /** Flags indicating which network API(s) to serve. */
@@ -76,7 +72,7 @@ extern "C" {
         bool allowPush;
         bool allowPull;
         
-        C4String networkInterface;
+        C4String hostname;
         C4ListenerPasswordAuthCallback passwordAuthCallback;
         void* context;
     } C4ListenerConfig;

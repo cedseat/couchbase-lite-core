@@ -26,6 +26,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1A410F3F24410B36009B89EF /* MessageOut.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B34A241854F2005A194D /* MessageOut.cc */; };
+		1A410F4324410B4F009B89EF /* Message.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B34B241854F2005A194D /* Message.cc */; };
 		1AD52269240F24A600832B71 /* c4Listener.cc in Sources */ = {isa = PBXBuildFile; fileRef = 275A74D51ED3AA11008CB57B /* c4Listener.cc */; };
 		1AD5226E240F24B300832B71 /* RESTSyncListener_stub.cc in Sources */ = {isa = PBXBuildFile; fileRef = 270BEE1D20647E8A005E8BE8 /* RESTSyncListener_stub.cc */; };
 		1AD5226F240F24CE00832B71 /* RESTListener.cc in Sources */ = {isa = PBXBuildFile; fileRef = 272851201EA4537A009CA22F /* RESTListener.cc */; };
@@ -147,15 +149,10 @@
 		2744B351241854F2005A194D /* WebSocketImpl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B331241854F2005A194D /* WebSocketImpl.cc */; };
 		2744B352241854F2005A194D /* Codec.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B334241854F2005A194D /* Codec.cc */; };
 		2744B354241854F2005A194D /* Actor.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B337241854F2005A194D /* Actor.cc */; };
-		2744B355241854F2005A194D /* ThreadedMailbox.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B33A241854F2005A194D /* ThreadedMailbox.cc */; };
 		2744B356241854F2005A194D /* GCDMailbox.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B33B241854F2005A194D /* GCDMailbox.cc */; };
-		2744B358241854F2005A194D /* Channel.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B342241854F2005A194D /* Channel.cc */; };
 		2744B359241854F2005A194D /* Timer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B343241854F2005A194D /* Timer.cc */; };
 		2744B35A241854F2005A194D /* BLIPConnection.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B347241854F2005A194D /* BLIPConnection.cc */; };
 		2744B35B241854F2005A194D /* MessageBuilder.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B349241854F2005A194D /* MessageBuilder.cc */; };
-		2744B35C241854F2005A194D /* MessageOut.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B34A241854F2005A194D /* MessageOut.cc */; };
-		2744B35D241854F2005A194D /* Message.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2744B34B241854F2005A194D /* Message.cc */; };
-		2744B36224186142005A194D /* BuiltInWebSocket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27304A0423023FCF0049AC69 /* BuiltInWebSocket.cc */; };
 		27456AFD1DC9507D00A38B20 /* SequenceTrackerTest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27456AFC1DC9507D00A38B20 /* SequenceTrackerTest.cc */; };
 		27469CFD233C35EB00A1EE1A /* TLSContext.hh in Headers */ = {isa = PBXBuildFile; fileRef = 27469CFB233C35EB00A1EE1A /* TLSContext.hh */; };
 		27469CFE233C35EB00A1EE1A /* TLSContext.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27469CFC233C35EB00A1EE1A /* TLSContext.cc */; };
@@ -3866,8 +3863,10 @@
 				2744B35B241854F2005A194D /* MessageBuilder.cc in Sources */,
 				2744B356241854F2005A194D /* GCDMailbox.cc in Sources */,
 				276301131F2FE960004A1592 /* UnicodeCollator_ICU.cc in Sources */,
+				1A410F4324410B4F009B89EF /* Message.cc in Sources */,
 				27E48713192171EA007D8940 /* DataFile.cc in Sources */,
 				273E9F721C51612E003115A6 /* c4Database.cc in Sources */,
+				1A410F3F24410B36009B89EF /* MessageOut.cc in Sources */,
 				272850AB1E9AF53B009CA22F /* Upgrader.cc in Sources */,
 				27469D08233D719800A1EE1A /* PublicKey+Apple.mm in Sources */,
 				1AD52271240F24CE00832B71 /* RESTListener+Replicate.cc in Sources */,

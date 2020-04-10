@@ -378,10 +378,7 @@ namespace litecore { namespace REST {
         slice authData = header("Authorization");
         slice type = authData.readToDelimiter(" "_sl);
         if (type == slice(kC4AuthTypeBasic)) {
-            alloc_slice decoded = slice(authData).decodeBase64();
-            slice cred = slice(decoded);
-            slice username = cred.readToDelimiter(":"_sl);
-            return validator(username, cred, ctx);
+            return validator(authData, ctx);
         }
         
         return true;
