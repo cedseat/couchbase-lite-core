@@ -30,6 +30,10 @@ if(ANDROID OR WINDOWS_STORE)
     return()
 endif()
 
+if(NOT LITECORE_BUILD_TESTS)
+    return()
+endif()
+
 # This project is not standalone.  Point to the "root" directory
 set(TOP ${PROJECT_SOURCE_DIR}/../../)
 
@@ -65,8 +69,6 @@ target_compile_definitions(
 
 target_include_directories(
     CppTests PRIVATE
-    ${TOP}vendor/BLIP-Cpp/src/util
-    ${TOP}vendor/BLIP-Cpp/include/blip_cpp
     ${TOP}vendor/fleece/API
     ${TOP}vendor/fleece/Experimental
     ${TOP}vendor/fleece/Fleece/Core
@@ -82,6 +84,9 @@ target_include_directories(
     ${TOP}C/tests
     ${TOP}Crypto
     ${TOP}Networking
+    ${TOP}Networking/BLIP
+    ${TOP}Networking/HTTP
+    ${TOP}Networking/WebSockets
     ${TOP}LiteCore/BlobStore
     ${TOP}LiteCore/Database
     ${TOP}LiteCore/RevTrees
@@ -91,6 +96,7 @@ target_include_directories(
     ${TOP}Replicator
     ${TOP}Replicator/tests
     ${TOP}REST
+    ${TOP}REST/tests
     ${TOP}vendor/sockpp/include
 )
 

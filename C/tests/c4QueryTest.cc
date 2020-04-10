@@ -876,13 +876,14 @@ N_WAY_TEST_CASE_METHOD(C4QueryTest, "C4Query observer", "[Query][C][!throws]") {
     c4queryobs_setEnabled(state.obs, true);
 
     C4Log("---- Waiting for query observer...");
-    while (state.count == 0)
-        this_thread::sleep_for(chrono::milliseconds(100));
+    WaitUntil(2000, [&]{return state.count > 0;});
 
     C4Log("Checking query observer...");
     CHECK(state.count == 1);
-    auto e = c4queryobs_getEnumerator(state.obs, &error);
+    c4::ref<C4QueryEnumerator> e = c4queryobs_getEnumerator(state.obs, true, &error);
     REQUIRE(e);
+    CHECK(c4queryobs_getEnumerator(state.obs, true, &error) == nullptr);
+    CHECK(error.code == 0);
     CHECK(c4queryenum_getRowCount(e, &error) == 8);
     state.count = 0;
 
@@ -892,18 +893,45 @@ N_WAY_TEST_CASE_METHOD(C4QueryTest, "C4Query observer", "[Query][C][!throws]") {
     this_thread::sleep_for(chrono::milliseconds(1000));
     REQUIRE(state.count == 0);
 
-    addPersonInState("after2", "CA");
+    {
+        C4Log("---- Changing a doc in the query");
+        TransactionHelper t(db);
+        addPersonInState("after2", "CA");
+        // wait, to make sure the observer doesn't try to run the query before the commit
+        this_thread::sleep_for(chrono::milliseconds(1000));
+        C4Log("---- Commiting changes");
+    }
 
     C4Log("---- Waiting for 2nd call of query observer...");
-    while (state.count == 0)
-        this_thread::sleep_for(chrono::milliseconds(100));
+    WaitUntil(2000, [&]{return state.count > 0;});
 
     C4Log("---- Checking query observer again...");
     CHECK(state.count == 1);
-    auto e2 = c4queryobs_getEnumerator(state.obs, &error);
+    c4::ref<C4QueryEnumerator> e2 = c4queryobs_getEnumerator(state.obs, false, &error);
     REQUIRE(e2);
     CHECK(e2 != e);
+    c4::ref<C4QueryEnumerator> e3 = c4queryobs_getEnumerator(state.obs, false, &error);
+    CHECK(e3 == e2);
     CHECK(c4queryenum_getRowCount(e2, &error) == 9);
+
+    // Testing with purged document:
+    C4Log("---- Purging a document...");
+    state.count = 0;
+    {
+        TransactionHelper t(db);
+        REQUIRE(c4db_purgeDoc(db, "after2"_sl, &error));
+        C4Log("---- Commiting changes");
+    }
+
+    C4Log("---- Waiting for 3rd call of query observer...");
+    WaitUntil(2000, [&]{return state.count > 0;});
+
+    C4Log("---- Checking query observer again...");
+    CHECK(state.count == 1);
+    e2 = c4queryobs_getEnumerator(state.obs, true, &error);
+    REQUIRE(e2);
+    CHECK(e2 != e);
+    CHECK(c4queryenum_getRowCount(e2, &error) == 8);
 }
 
 N_WAY_TEST_CASE_METHOD(C4QueryTest, "Delete index", "[Query][C][!throws]") {
@@ -949,6 +977,36 @@ N_WAY_TEST_CASE_METHOD(C4QueryTest, "Database alias column names", "[Query][C][!
     CHECK(c4query_columnTitle(query, 0) == expected1);
     CHECK(c4query_columnTitle(query, 1) == expected2);
     FLSliceResult_Release(queryStr);
+}
+
+N_WAY_TEST_CASE_METHOD(C4QueryTest, "C4Query RevisionID", "[Query][C][!throws]") {
+    C4Error error;
+    TransactionHelper t(db);
+    
+    // New Doc:
+    auto doc1a = c4doc_create(db, C4STR("doc1"), kC4SliceNull, 0, &error);
+    auto revID = toString(doc1a->revID);
+    compileSelect(json5("{WHAT: [['._revisionID']], WHERE: ['=', ['._id'], 'doc1']}"));
+    CHECK(run() == (vector<string>{revID}));
+    
+    // revisionID in WHERE:
+    compileSelect(json5("{WHAT: [['._id']], WHERE: ['=', ['._revisionID'], '" + revID + "']}"));
+    CHECK(run() == (vector<string>{"doc1"}));
+    
+    // Updated Doc:
+    auto doc1b = c4doc_update(doc1a, json2fleece("{'ok':'go'}"), 0, &error);
+    revID = toString(doc1b->revID);
+    c4doc_release(doc1a);
+    compileSelect(json5("{WHAT: [['._revisionID']], WHERE: ['=', ['._id'], 'doc1']}"));
+    CHECK(run() == (vector<string>{revID}));
+    
+    // Deleted Doc:
+    auto doc1c = c4doc_update(doc1b, kC4SliceNull, kRevDeleted, &error);
+    revID = toString(doc1c->revID);
+    c4doc_release(doc1b);
+    compileSelect(json5("{WHAT: [['._revisionID']], WHERE: ['AND', ['._deleted'], ['=', ['._id'], 'doc1']]}"));
+    CHECK(run() == (vector<string>{revID}));
+    c4doc_release(doc1c);
 }
 
 #pragma mark - COLLATION:

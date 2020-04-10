@@ -237,7 +237,7 @@ namespace litecore { namespace repl {
         if (currentLevel == kC4Stopped)
             return kC4Stopped;
 
-        ActivityLevel level;
+        ActivityLevel level = kC4Busy;
         switch (_connectionState) {
             case Connection::kConnecting:
                 level = kC4Connecting;
@@ -266,6 +266,7 @@ namespace litecore { namespace repl {
                 // After connection closes, remain Busy (or Connecting) while I wait for db to
                 // finish writes and for myself to process any pending messages; then go to Stopped.
                 level = Worker::computeActivityLevel();
+                level = max(level, max(_pushStatus.level, _pullStatus.level));
                 if (level < kC4Busy)
                     level = kC4Stopped;
                 else if (currentLevel == kC4Connecting)

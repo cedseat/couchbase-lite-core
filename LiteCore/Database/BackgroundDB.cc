@@ -54,8 +54,15 @@ namespace litecore {
     }
 
 
+    void BackgroundDB::externalTransactionCommitted(const SequenceTracker &sourceTracker) {
+        notifyTransactionObservers();
+    }
+
+
     void BackgroundDB::useInTransaction(TransactionTask task) {
         use([=](DataFile* dataFile) {
+            if (!dataFile)
+                return;
             Transaction t(dataFile);
             SequenceTracker sequenceTracker;
             sequenceTracker.beginTransaction();
@@ -76,14 +83,38 @@ namespace litecore {
             }
 
             t.commit();
-
             // Notify other Database instances of any changes:
-            dataFile->forOtherDataFiles([&](DataFile *other) {
-                auto db = dynamic_cast<Database*>(other->delegate());
-                if (db)
-                    db->externalTransactionCommitted(sequenceTracker);
-            });
+            t.notifyCommitted(sequenceTracker);
             sequenceTracker.endTransaction(true);
+            // Notify my own observers:
+            notifyTransactionObservers();
+        });
+    }
+
+
+    void BackgroundDB::addTransactionObserver(TransactionObserver *obs) {
+        use([=](DataFile*) {
+            _transactionObservers.push_back(obs);
+        });
+    }
+
+
+    void BackgroundDB::removeTransactionObserver(TransactionObserver* obs) {
+        use([=](DataFile*) {
+            auto i = std::find(_transactionObservers.begin(), _transactionObservers.end(), obs);
+            if (i != _transactionObservers.end())
+                _transactionObservers.erase(i);
+        });
+    }
+
+
+    void BackgroundDB::notifyTransactionObservers() {
+        use([=](DataFile*) {
+            if (!_transactionObservers.empty()) {
+                auto obsCopy = _transactionObservers;
+                for (auto obs : obsCopy)
+                    obs->transactionCommitted();
+            }
         });
     }
 

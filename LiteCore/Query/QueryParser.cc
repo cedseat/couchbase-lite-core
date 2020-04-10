@@ -831,6 +831,11 @@ namespace litecore {
     }
 
 
+    // Handles "x || y", turning it into a call to the concat() function
+    void QueryParser::concatOp(slice op, Array::iterator& operands) {
+        functionOp("concat()"_sl, operands);
+    }
+
     // Handles "x BETWEEN y AND z" expressions
     void QueryParser::betweenOp(slice op, Array::iterator& operands) {
         parseCollatableNode(operands[0]);
@@ -1333,6 +1338,9 @@ namespace litecore {
                 require(fn == kValueFnName, "can't use '_deleted' in this context");
                 writeDeletionTest(alias, true);
                 _checkedDeleted = true;     // note that the query has tested _deleted
+                return;
+            } else if (meta == kRevIDProperty) {
+                _sql << kVersionFnName << "(" << tablePrefix << "version" << ")";
                 return;
             }
         }
