@@ -369,7 +369,7 @@ namespace litecore { namespace repl {
     }
 
     void Replicator::_onHTTPResponse(int status, websocket::Headers headers) {
-        if (status == 101 && !headers["Sec-WebSocket-Protocol"_sl]) {
+        if (status == 101 && (!headers["Sec-WebSocket-Protocol"_sl] || !headers["sec-websocket-protocol"_sl])) {
             gotError(c4error_make(WebSocketDomain, kWebSocketCloseProtocolError,
                                   "Incompatible replication protocol "
                                   "(missing 'Sec-WebSocket-Protocol' response header)"_sl));
